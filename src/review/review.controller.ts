@@ -28,6 +28,7 @@ export class ReviewController {
     const name = contacts && contacts.length > 0 ? contacts[0].name : 'Не указано';
 
     const message = `Новый лид\n${name.replace(/[\[\]]/g, '')}`;
+    console.log(message)
     return this.telegramService.sendMessage(message)
   }
 
