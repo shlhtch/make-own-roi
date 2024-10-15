@@ -10,16 +10,17 @@ export class ReviewController {
     private readonly reviewService: ReviewService,
     private readonly telegramService: TelegramService
   ) {}
-
+  // запрос с получением данных по вебхуку со стороннего сервиса
   @Post()
   create(@Body() createTestDto: CreateReviewDto) {
     console.log('Received body:', JSON.stringify(createTestDto, null, 2));
     console.log('Account:', createTestDto.account);
-    console.log('Leads:', JSON.stringify(createTestDto.leads, null, 2));
-    console.log('Hello')
-    return ('Hello')
+    console.log('Somthing:', JSON.stringify(createTestDto.leads, null, 2));
+    console.log('sample')
+    return ('sample')
   }
 
+  // запрос для отправки уведомления в TG
   @UsePipes(new ValidationPipe())
   @Post('notify')
   async notify(@Body() createReviewDto: CreateReviewDto) {
@@ -27,28 +28,8 @@ export class ReviewController {
 
     const name = contacts && contacts.length > 0 ? contacts[0].name : 'Не указано';
 
-    const message = `Новый лид\n${name.replace(/[\[\]]/g, '')}`;
+    const message = `Название события\n${name.replace(/[\[\]]/g, '')}`;
     console.log(message)
     return this.telegramService.sendMessage(message)
-  }
-
-  @Get()
-  findAll() {
-    return this.reviewService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reviewService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
-    return this.reviewService.update(+id, updateReviewDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reviewService.remove(+id);
   }
 }
