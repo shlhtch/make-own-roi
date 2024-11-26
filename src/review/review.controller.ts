@@ -22,7 +22,7 @@ export class ReviewController {
 
   @UsePipes(new ValidationPipe())
   @Post('notify')
-async notify(@Body() body: any) {
+  async notify(@Body() body: any) {
   console.log('Received body:', body);
 
   const unsorted = body.unsorted;

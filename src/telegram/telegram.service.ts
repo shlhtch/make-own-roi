@@ -16,7 +16,7 @@ export class TelegramService {
     this.bot = new Telegraf(options.token);
     this.options = options;
   }
-
+  //функция отправки уведомления в ТГ
   async sendMessage(message: string, chatId: string = this.options.chatId) {
     await this.bot.telegram.sendMessage(chatId, message);
   }
