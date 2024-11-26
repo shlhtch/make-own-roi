@@ -13,24 +13,43 @@ export class ReviewController {
 
   @Post()
   create(@Body() createTestDto: CreateReviewDto) {
-    console.log('Received body:', JSON.stringify(createTestDto, null, 2));
-    console.log('Account:', createTestDto.account);
-    console.log('Leads:', JSON.stringify(createTestDto.leads, null, 2));
-    console.log('Hello')
+    console.log('Received body:', JSON.stringify);
+    // console.log('Account:', createTestDto.account);
+    // console.log('Leads:', JSON.stringify(createTestDto.leads, null, 2));
+    // console.log('Hello')
     return ('Hello')
   }
 
   @UsePipes(new ValidationPipe())
   @Post('notify')
-  async notify(@Body() createReviewDto: CreateReviewDto) {
-     const contacts = createReviewDto.contacts?.add;
+async notify(@Body() body: any) {
+  console.log('Received body:', body);
 
-    const name = contacts && contacts.length > 0 ? contacts[0].name : 'Не указано';
+  const unsorted = body.unsorted;
+  console.log('Unsorted Object:', unsorted);
 
-    const message = `Новый лид\n${name.replace(/[\[\]]/g, '')}`;
-    console.log(message)
-    return this.telegramService.sendMessage(message)
+  let name = '';
+
+  const adds = unsorted.add;
+  if (adds && adds.length > 0) {
+    const firstAdd = adds[0];
+    
+    const sourceData = firstAdd.source_data;
+
+    if (sourceData && sourceData.client) {
+      name = sourceData.client.name;
+      console.log('Client Name:', name);
+    } else {
+      console.log('Client data not found in source_data.');
+    }
+  } else {
+    console.log('No elements in the add array.');
   }
+
+  const message = `Новый лид\n${name.replace(/[$$]/g, '')}`;
+  console.log(message);
+  return this.telegramService.sendMessage(message);
+}
 
   @Get()
   findAll() {
